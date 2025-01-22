@@ -1,0 +1,41 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: webhose-node-backend
+    container_name: webhose-be
+    command: "yarn dev"
+    restart: always
+    depends_on:
+      - postgres
+    ports:
+      - "8001:8000"
+    env_file:
+      - .env
+    environment:
+      POSTGRES_HOST: ${POSTGRES_HOST}
+    volumes:
+      - .:/app
+    networks:
+      - webhose
+
+  postgres:
+    image: postgres:15
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    container_name: webhose-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    networks:
+      - webhose
+volumes:
+  db_data:
+
+networks:
+  webhose:
+    driver: bridge
