@@ -65,6 +65,33 @@ To run tests using Jest, execute the following:
 docker exec -it webhose-be yarn test
 ```
 
+### 7. API Endpoints
+
+#### **`POST /api/fetchPosts`**
+This endpoint triggers the WebhoseService to fetch posts from the Webhose API and store them in the PostgreSQL database. 
+
+##### **Request Body**
+```json
+{
+  "query": "<search_query>"
+}
+```
+
+##### **Example Request**
+```bash
+curl -X POST http://localhost:8000/api/fetchPosts \
+-H "Content-Type: application/json" \
+-d '{"query": "latest tech news"}'
+```
+
+##### **Response**
+- **`200 OK`**: Successfully fetched and stored posts.
+- **`500 Internal Server Error`**: An error occurred while processing the request.
+
+##### **Notes**
+- This process may take time depending on the number of posts fetched from the API.
+- **Improvement Suggestion**: The task can be added to a queue system (e.g., **BullMQ** or **RabbitMQ**) for better scalability and performance.
+
 ## Local Development (Without Docker)
 
 ### 1. Install Dependencies
